@@ -1,0 +1,113 @@
+navigation.jsx
+import {Link} from "react-router-dom";
+const Navigation =()=>{
+    return(
+        <>
+        <Link to="/"className="my-link">Home</Link>
+        <Link to="/about"className="my-link">About</Link>
+        <Link to="/product"className="my-link">Product</Link>
+        <Link to="/contact"className="my-link">Contact</Link>
+        </>
+    )
+}
+export default Navigation;
+
+About.jsx
+import{link} from 'react-router-dom';
+import Navigation from '../components/navigation';
+import React from 'react'
+
+const About = () => {
+  return (
+    <div>
+      <Navigation />
+      <div className='page-image1'></div>
+    </div>
+  )
+}
+
+export default About;
+
+
+App.js
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './App.css';
+import Home from './pages/Home';
+import About from './pages/About';
+import Product from './pages/Product';
+import Contact from './pages/Contact';
+const router= createBrowserRouter ([
+  {path:"/",element:<Home/>},
+  {path:"/about",element:<About/>},
+  {path:"/product",element:<Product/>},
+  {path:"/contact",element:<Contact/>}
+])
+
+function App() {
+  return (
+    <RouterProvider router={router}/>
+  );
+}
+
+export default App;
+  
+App.css
+body{
+  background-color: rgb(69, 84, 84);
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+h1{
+  font-size: 100px;
+}
+.my-link{
+  padding:10px;
+  font-size:19px;
+  color:white;
+  text-decoration: none;
+}
+.my-link:hover{
+  color:darkblue;
+  text-decoration: underline;
+}
+.page-image{
+ 
+  background-image: url('pages/homepage.png');
+  background-size: cover;   /* fills the container */
+  
+  width: 1000px;
+  height: 700px;
+}
+.page-image1{
+  background-image: url('pages/about.png');
+  background-size: cover;   /* fills the container */
+  
+  width: 1000px;
+  height: 700px;
+}
+.page-image2{
+  background-image: url('pages/product.jpg');
+  background-size: cover;   /* fills the container */
+ 
+  width: 1000px;
+  height: 700px;
+}
+.page-image3{
+  background-image: url('pages/contact.jpg');
+  background-size: cover;   /* fills the container */
+  
+  width: 1000px;
+  height: 700px;
+}
+
+
+.navbar{
+  background-color: rgb(32, 47, 47);
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}

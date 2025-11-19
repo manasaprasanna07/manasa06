@@ -1,0 +1,202 @@
+controller
+
+package com.cpc123.crudcpc.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMethod;
+import com.cpc123.crudcpc.model.Student;
+import com.cpc123.crudcpc.repository.StudentRepo;
+
+@Controller
+public class StudentController {
+	@Autowired
+	StudentRepo studentrepo;
+	
+	@RequestMapping("index")
+	public String index() {
+		return ("index.jsp");
+	}
+@RequestMapping("addstu")
+public  String addstu(Student student) {
+	studentrepo.save(student);
+	return "index.jsp";
+}
+@RequestMapping("getStu")
+public ModelAndView getStu (@RequestParam int sid) {
+	ModelAndView mv =new ModelAndView("display.jsp");
+	Student student = studentrepo.findById(sid).orElse(new Student());
+	mv.addObject(student);
+	return mv;
+}
+	@RequestMapping("delStu")
+	public ModelAndView delStu(@RequestParam int sid) {
+		ModelAndView mv =new ModelAndView("delete.jsp");
+		Student student = studentrepo.findById(sid).orElse(new Student());
+		studentrepo.deleteById(sid);
+		mv.addObject(student);
+		return mv;
+
+}
+	@RequestMapping("upStu")
+	public ModelAndView upStu(@RequestParam int sid) {
+	    ModelAndView mv = new ModelAndView("update.jsp");
+	    Student student = studentrepo.findById(sid).orElse(new Student());
+	    mv.addObject("student", student); // explicitly name it "student"
+	    return mv;  
+	}
+
+
+	@RequestMapping(value = "updateStudent", method = RequestMethod.POST)
+	public String updateStudent(Student student) {
+	    studentrepo.save(student);  // This updates the existing student
+	    return "index.jsp";          // Redirect back to main page
+	}
+
+
+}
+
+Model
+package com.cpc123.crudcpc.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+@Entity
+
+public class Student {
+	
+	@Id
+	private int sid;
+	private String sname;
+	private String branch;
+	private String college;
+	public int getSid() {
+		return sid;
+	}
+	public void setSid(int sid) {
+		this.sid = sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getBranch() {
+		return branch;
+	}
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+	public String getCollege() {
+		return college;
+	}
+	public void setCollege(String college) {
+		this.college = college;
+	}
+	@Override
+	public String toString() {
+		return "Student [sid=" + sid + ", sname=" + sname + ", branch=" + branch + ", college=" + college + "]";
+	}
+	
+
+}
+
+Repository
+package com.cpc123.crudcpc.repository;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.cpc123.crudcpc.model.Student;
+
+public interface StudentRepo extends CrudRepository<Student, Integer>{
+
+}
+
+Application.properties
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.h2.console.enabled=true
+
+
+server.port=8081
+
+
+delete.jsp
+
+${student.sname} Deleted sucessfully..
+
+index.jsp
+<html>
+	<head>
+		CRUD OPERATION
+		</head>
+	<body>
+		<div Style="text-align:center">
+			<h1>CRUD Operation using jsp and mysql(without API)</h1>
+		</div>
+		<div Style="padding-left:50px">
+			<h2> Add students</h2>
+			<form action="addstu">
+			Student Id:<input type="text" name="sid"/><br>
+			Student name:<input type="text"  name="sname"/><br>
+			Branch:<input type="text" name="branch"/><br>
+			College:<input type="text" name="college"/><br>
+			<input type="submit"/>
+			</form>
+			<h2>Get Student</h2>
+			<form action="getStu">
+				Student Id:<input type="text" name="sid"/><br>
+				<input type="submit"/>
+				</form>
+				<h2>Delete Student</h2>
+					<form action="delStu">
+					Student Id:<input type="text" name="sid"/><br>
+					<input type="submit"/>
+					</form>
+					<h2>Update Student</h2>
+					<form action="upStu">
+				Student Id:<input type="text" name="sid"/><br>
+				<input type="submit"/>
+				</form>		
+						
+		</div>
+		</body>
+		</html>
+
+display.jsp
+
+Student Id:${student.sid}<br/>
+Student Name:${student.sname}<br/>
+Branch:${student.branch}<br/>
+college:${student.college}<br/>
+
+update.jsp
+
+<html>
+<head>
+    <title>Update Student</title>
+</head>
+<body>
+<div style="text-align:center">
+    <h1>Update Student</h1>
+</div>
+<div style="padding-left:50px">
+    <form action="updateStudent" method="post">
+        Student Id: <input type="text" name="sid" value="${student.sid}" readonly/><br/>
+        Student Name: <input type="text" name="sname" value="${student.sname}" /><br/>
+        Branch: <input type="text" name="branch" value="${student.branch}" /><br/>
+        College: <input type="text" name="college" value="${student.college}" /><br/>
+        <input type="submit" value="Update Student"/>
+    </form>
+</div>
+</body>
+</html>
+

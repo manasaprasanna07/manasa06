@@ -1,0 +1,131 @@
+model class
+
+package com.cpcjunit.junittest24;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+@Entity
+@Table(name="tbl_hotel")
+public class Hotel {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int hid;
+	private String hname;
+	private String haddress;
+	private String fitem;
+	public Hotel(String hname, String haddress, String fitem) {
+		
+		this.hname = hname;
+		this.haddress = haddress;
+		this.fitem = fitem;
+	}
+	public Hotel() {
+		
+		// TODO Auto-generated constructor stub
+	}
+	public int getHid() {
+		return hid;
+	}
+	public void setHid(int hid) {
+		this.hid = hid;
+	}
+	public String getHname() {
+		return hname;
+	}
+	public void setHname(String hname) {
+		this.hname = hname;
+	}
+	public String getHaddress() {
+		return haddress;
+	}
+	public void setHaddress(String haddress) {
+		this.haddress = haddress;
+	}
+	public String getFitem() {
+		return fitem;
+	}
+	public void setFitem(String fitem) {
+		this.fitem = fitem;
+	}
+	
+	
+
+}
+
+HotelRepo
+
+package com.cpcjunit.junittest24;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface HotelRepo extends JpaRepository<Hotel , Integer>{
+
+}
+
+
+HotelRepoTest
+
+package com.cpcjunit.junittest24;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
+
+@DataJpaTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class HotelRepoTest {
+	@Autowired
+	private HotelRepo hotelrepo;
+	
+	
+	@Test
+	@Order(1)
+	@Rollback(value=false)
+	public void saveHotelTest() {
+		Hotel hotel = new Hotel("radisonBlue","mysore","dosa");
+		hotelrepo.save(hotel);
+		Assertions.assertThat(hotel.getHid()).isGreaterThan(0);
+	
+	}
+	@Test
+	@Order(2)
+	public void getHotelTest() {
+		List<Hotel> hotel = hotelrepo.findAll();
+		Assertions.assertThat(hotel.size()).isGreaterThan(0);
+	}
+	@Test
+	@Order(3)
+	@Rollback(value=false)
+	public void updHotelTest() {
+		Hotel hotel = hotelrepo.findById(1).get();
+		hotel.setFitem("poori");
+		
+		Hotel newHotel = hotelrepo.save(hotel);
+		Assertions.assertThat(newHotel.getFitem()).isEqualTo("poori");
+	}
+	@Test
+	@Order(4)
+	@Rollback(value=false)
+	public void delHoteltest() {
+		boolean beforeDelete = hotelrepo.findById(1).isPresent();
+		hotelrepo.deleteById(1);
+		boolean afterDelete = hotelrepo.findById(1).isPresent();
+		assertTrue(beforeDelete);
+		assertFalse(afterDelete);
+	}
+}
+

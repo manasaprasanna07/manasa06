@@ -1,0 +1,128 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registration Page</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Registration Form</h2>
+    <form id="registrationForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="text" id="fatherName" placeholder="Father's Name" required />
+      <input type="text" id="motherName" placeholder="Mother's Name" required />
+      
+      <input type="text" id="phone" placeholder="Phone Number" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="text" id="gender" placeholder="Gender" required />
+      <input type="date" id="dob" placeholder="Date of Birth" required />
+      <input type="text" id="address" placeholder="Address" required />
+      <input type="Dropdown" id="country" placeholder="country"/>
+      <input type="Dropdown" id="state" placeholder=" state name"/>
+      <input type="text" id="city" placeholder="city"/>
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+      <input type="checkbox" id="Terms and Conditions" placeholder="terms and condition" required/>
+      <button type="reset">Clear</button>
+      <button type="submit">Register</button>
+      <p id="error" class="error"></p>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+scrip.js
+document.getElementById('registrationForm').addEventListener('submit', function (e) {
+  e.preventDefault(); // Prevent form from submitting by default
+
+  // Get form values
+  const name = document.getElementById('name').value.trim();
+  const fathername = document.getElementById('fatherName').value;
+  const mothername=document.getElementById('motherName').value;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const errorDisplay = document.getElementById('error');
+  const phone=document.getElementById('phone').value;
+  // Reset error
+  errorDisplay.textContent = '';
+
+  // Validation
+  if (name === '' || email === '' || password === '' || confirmPassword === '') {
+    errorDisplay.textContent = 'All fields are required.';
+    return;
+  }
+
+  // Email format check (basic)
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    errorDisplay.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  // Password match check
+  if (password !== confirmPassword) {
+    errorDisplay.textContent = 'Passwords do not match.';
+    return;
+  }
+
+  // Password strength check (optional)
+  if (password.length < 6) {
+    errorDisplay.textContent = 'Password must be at least 6 characters.';
+    return;
+  }
+
+  // If all validations pass
+  alert('Registration successful!');
+  console.log({ name, email, password,dob,phone,country,state,city });
+
+  // Reset form
+  document.getElementById('registrationForm').reset();
+});
+
+
+style.css
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f3f3;
+}
+
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
