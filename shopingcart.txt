@@ -1,0 +1,86 @@
+import { useState } from "react";
+import data from "../products.json"
+
+const Viewcart=()=>{
+    const [products] = useState(data);
+    return (
+        <>
+        <div className="header">
+            <div className="logo"> </div>
+        </div>
+        <div className="banner">
+
+
+        </div>
+        <div className="productlist">
+            {products.map((products)=>(
+                <div key={products.id}>
+                    <div className="img">
+                        <img src={products.image} alt={products.name}/>
+                    </div>
+                    <div className="details">
+                    <h3>{products.name}</h3>
+                    <p>price Rs :{products.price}</p>
+                    <button>Add to cart</button>
+                    </div>
+                </div>
+            ))}
+
+        </div>
+        <div className="footer">
+            @copywrite CPC polytechnic, Mysuru
+        </div>
+        </>
+    )
+};
+export default Viewcart; 
+
+.header{
+  background-color: #f18317;
+  padding: 5x 30px;
+  width: 100%;
+  background-size: cover;
+}
+.logo{
+  background: url(/src/logo.jpg);
+  width: 300px;
+  height: 75px;
+}
+.banner{
+  background: url(/src/onlinecart.jpg);
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+}
+.productlist{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  padding: 30px 0px;
+}
+.productlist .img{
+  width: 100%;
+  height: 150px;
+}
+.productlist .img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.footer{
+  background-color: #f9ad1c;
+  padding: 15px 30px;
+}
+.details button{
+  background-color: #f84e4f;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-weight: bolder;
+
+}
+.details button:hover{
+  background-color: rgb(204, 145, 8);
+}
